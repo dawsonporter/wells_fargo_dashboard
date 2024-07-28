@@ -576,7 +576,7 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
             dcc.Dropdown(
                 id='peer-institutions-selector',
                 options=[{'label': bank, 'value': bank} for bank in peer_institutions],
-                value=[],  # Default to no peer institutions selected
+                value=peer_institutions,  # Set default value to all peer institutions
                 multi=True,
                 style={'width': '100%', 'color': '#333333'},
                 optionHeight=55
@@ -639,8 +639,8 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
     def update_bar_chart(selected_metric, selected_date, selected_peers):
         selected_date = pd.to_datetime(selected_date).to_pydatetime()
 
-        # Always include Wells Fargo
-        selected_banks = ['Wells Fargo'] + selected_peers
+        # Always include Wells Fargo, even if no peers are selected
+        selected_banks = ['Wells Fargo'] + (selected_peers if selected_peers else [])
 
         filtered_df = df[(df['Date'] == selected_date) & (df['Bank'].isin(selected_banks))]
 
