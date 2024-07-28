@@ -369,7 +369,6 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
         "Goldman Sachs Bank USA": "Goldman Sachs",
         "Morgan Stanley Bank, National Association": "Morgan Stanley",
         "TD Bank, National Association": "TD Bank",
-        "Capital One Bank (USA), National Association": "Capital One Bank (USA)",
         "Discover Bank": "Discover Bank",
         "Comenity Bank": "Comenity Bank",
         "Synchrony Bank": "Synchrony Bank",
@@ -393,7 +392,6 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
     ]
     card_peers = [
         "Capital One",
-        "Capital One Bank (USA)",
         "Discover Bank",
         "Comenity Bank",
         "Synchrony Bank",
@@ -412,7 +410,7 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
             <style>
                 body {
                     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                    background-color: #f8f9fa;
+                    background-color: #e6e6e6;
                     color: #333333;
                     margin: 0;
                     padding: 0;
@@ -423,19 +421,19 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
                 }
                 .sidebar {
                     width: 500px;
-                    background-color: #ffffff;
+                    background-color: #f0f0f0;
                     padding: 2rem 1rem;
                     overflow-y: auto;
-                    border-right: 1px solid #e9ecef;
+                    border-right: 1px solid #d1d1d1;
                 }
                 .content {
                     flex-grow: 1;
                     padding: 2rem;
                     overflow-y: auto;
-                    background-color: #f8f9fa;
+                    background-color: #e6e6e6;
                 }
                 .card {
-                    background-color: #ffffff;
+                    background-color: #f5f5f5;
                     border: none;
                     border-radius: 8px;
                     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -448,8 +446,8 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
                     font-weight: bold;
                 }
                 .card-header {
-                    background-color: #ffffff;
-                    border-bottom: 1px solid #e9ecef;
+                    background-color: #f0f0f0;
+                    border-bottom: 1px solid #d1d1d1;
                     padding: 0.5rem 1rem;
                 }
                 .card-body {
@@ -460,35 +458,35 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
                     background-color: #ffffff;
                 }
                 .table thead th {
-                    background-color: #f8f9fa;
+                    background-color: #e0e0e0;
                     color: #333333;
                 }
                 .table tbody td {
                     color: #333333;
                 }
                 .table-striped tbody tr:nth-of-type(odd) {
-                    background-color: #f8f9fa;
+                    background-color: #f5f5f5;
                 }
                 .table-hover tbody tr:hover {
                     background-color: #e9ecef;
                 }
                 .Select-menu-outer {
                     max-height: 400px !important;
-                    background-color: #ffffff;
+                    background-color: #f5f5f5;
                 }
                 .Select-option {
                     padding: 12px 8px !important;
                     color: #333333;
                 }
                 .Select-option:hover {
-                    background-color: #f8f9fa;
+                    background-color: #e0e0e0;
                 }
                 .Select-value-label {
                     color: #333333 !important;
                 }
                 .Select-control {
-                    background-color: #ffffff !important;
-                    border-color: #ced4da !important;
+                    background-color: #f5f5f5 !important;
+                    border-color: #d1d1d1 !important;
                 }
                 .Select-placeholder, .Select--single > .Select-control .Select-value {
                     color: #333333 !important;
@@ -498,17 +496,17 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
                 }
                 .source-info {
                     font-size: 0.8rem;
-                    color: #6c757d;
+                    color: #666666;
                     text-align: center;
                     padding: 10px 0;
                 }
                 .metric-definition {
                     font-size: 0.9rem;
-                    color: #6c757d;
+                    color: #666666;
                     margin-top: 10px;
                 }
                 .rc-slider-rail {
-                    background-color: #ced4da;
+                    background-color: #bfbfbf;
                 }
                 .rc-slider-track {
                     background-color: #007bff;
@@ -517,12 +515,12 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
                     border-color: #007bff;
                 }
                 .rc-slider-mark-text {
-                    color: #6c757d;
+                    color: #666666;
                 }
                 .stat-section {
                     margin-bottom: 15px;
                     padding: 10px;
-                    background-color: #ffffff;
+                    background-color: #f5f5f5;
                     border-radius: 5px;
                 }
                 .stat-section-title {
@@ -1042,7 +1040,6 @@ def main():
         {"cert": "33124", "name": "Goldman Sachs Bank USA"},
         {"cert": "32992", "name": "Morgan Stanley Bank, National Association"},
         {"cert": "18409", "name": "TD Bank, National Association"},
-        {"cert": "33954", "name": "Capital One Bank (USA), National Association"},
         {"cert": "5649", "name": "Discover Bank"},
         {"cert": "27499", "name": "Comenity Bank"},
         {"cert": "27314", "name": "Synchrony Bank"},
