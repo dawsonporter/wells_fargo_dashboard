@@ -369,33 +369,24 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
         "Goldman Sachs Bank USA": "Goldman Sachs",
         "Morgan Stanley Bank, National Association": "Morgan Stanley",
         "TD Bank, National Association": "TD Bank",
-        "Discover Bank": "Discover Bank",
-        "Comenity Bank": "Comenity Bank",
-        "Synchrony Bank": "Synchrony Bank",
         "U.S. Bank National Association": "U.S. Bank"
     }
 
     # Apply the mapping to the dataframe
     df['Bank'] = df['Bank'].map(bank_name_mapping)
 
-    # Define bank categories with shorter names
-    bank_peers = [
+    # Define peer institutions
+    peer_institutions = [
         "Bank of America",
         "Citibank",
         "JPMorgan Chase",
+        "U.S. Bank",
         "PNC Bank",
         "Truist Bank",
         "Capital One",
         "Goldman Sachs",
         "Morgan Stanley",
         "TD Bank"
-    ]
-    card_peers = [
-        "Capital One",
-        "Discover Bank",
-        "Comenity Bank",
-        "Synchrony Bank",
-        "U.S. Bank"
     ]
 
     # Custom CSS for better styling
@@ -581,27 +572,16 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
             ),
             html.Div(id='metric-definition', className="metric-definition mt-3"),
             html.Hr(style={"borderColor": "#e9ecef"}),
-            html.P("Select banks to compare", className="lead", style={"color": "#333333"}),
-            html.P("Bank Peers", style={"color": "#333333", "font-weight": "bold"}),
+            html.P("Select peer institutions to compare", className="lead", style={"color": "#333333"}),
             dcc.Dropdown(
-                id='bank-peers-selector',
-                options=[{'label': bank, 'value': bank} for bank in bank_peers],
-                value=[],  # Default to no bank peers selected
+                id='peer-institutions-selector',
+                options=[{'label': bank, 'value': bank} for bank in peer_institutions],
+                value=[],  # Default to no peer institutions selected
                 multi=True,
                 style={'width': '100%', 'color': '#333333'},
                 optionHeight=55
             ),
-            html.Button("Add All Bank Peers", id="add-all-bank-peers", className="add-all-btn"),
-            html.P("Card Peers", style={"color": "#333333", "font-weight": "bold", "margin-top": "10px"}),
-            dcc.Dropdown(
-                id='card-peers-selector',
-                options=[{'label': bank, 'value': bank} for bank in card_peers],
-                value=[],  # Default to no card peers selected
-                multi=True,
-                style={'width': '100%', 'color': '#333333'},
-                optionHeight=55
-            ),
-            html.Button("Add All Card Peers", id="add-all-card-peers", className="add-all-btn"),
+            html.Button("Add All Peer Institutions", id="add-all-peers", className="add-all-btn"),
             html.Div(id='selected-banks-info', className="mt-3", style={"color": "#333333"})
         ],
         className="sidebar"
@@ -654,14 +634,13 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
         Output('selected-banks-info', 'children'),
         Input('metric-selector', 'value'),
         Input('date-selector', 'value'),
-        Input('bank-peers-selector', 'value'),
-        Input('card-peers-selector', 'value')
+        Input('peer-institutions-selector', 'value')
     )
-    def update_bar_chart(selected_metric, selected_date, selected_bank_peers, selected_card_peers):
+    def update_bar_chart(selected_metric, selected_date, selected_peers):
         selected_date = pd.to_datetime(selected_date).to_pydatetime()
 
         # Always include Wells Fargo
-        selected_banks = ['Wells Fargo'] + selected_bank_peers + selected_card_peers
+        selected_banks = ['Wells Fargo'] + selected_peers
 
         filtered_df = df[(df['Date'] == selected_date) & (df['Bank'].isin(selected_banks))]
 
@@ -922,8 +901,7 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
         metric_definition = html.P(metric_definitions.get(selected_metric, ''), className="metric-definition")
 
         selected_banks_info = html.Div([
-            html.P(f"Bank Peers: {len(selected_bank_peers)} of {len(bank_peers)} selected"),
-            html.P(f"Card Peers: {len(selected_card_peers)} of {len(card_peers)} selected")
+            html.P(f"Peer Institutions: {len(selected_peers)} of {len(peer_institutions)} selected")
         ], style={"margin-top": "10px", "color": "#333333"})
 
         return fig, overview, metric_definition, selected_banks_info
@@ -933,10 +911,9 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
         Input('bar-chart', 'clickData'),
         Input('date-selector', 'value'),
         Input('metric-selector', 'value'),
-        Input('bank-peers-selector', 'value'),
-        Input('card-peers-selector', 'value')
+        Input('peer-institutions-selector', 'value')
     )
-    def display_click_data(clickData, selected_date, selected_metric, selected_bank_peers, selected_card_peers):
+    def display_click_data(clickData, selected_date, selected_metric, selected_peers):
         selected_date = pd.to_datetime(selected_date).to_pydatetime()
         ctx = dash.callback_context
         triggered_id = ctx.triggered[0]['prop_id'].split('.')[0]
@@ -954,7 +931,7 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
             bank = ctx.inputs['bar-chart.clickData']['points'][0]['x']
 
         # Always include Wells Fargo
-        selected_banks = ['Wells Fargo'] + selected_bank_peers + selected_card_peers
+        selected_banks = ['Wells Fargo'] + selected_peers
 
         if bank not in selected_banks:
             return html.P("Selected bank is not in the current comparison. Please select a displayed bank.", style={"color": "#333333"})
@@ -989,35 +966,12 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
         ]
 
     @app.callback(
-        [Output('bank-peers-selector', 'options'),
-         Output('card-peers-selector', 'options')],
-        [Input('bank-peers-selector', 'value'),
-         Input('card-peers-selector', 'value')]
+        Output('peer-institutions-selector', 'value'),
+        Input('add-all-peers', 'n_clicks'),
+        State('peer-institutions-selector', 'value'),
+        State('peer-institutions-selector', 'options')
     )
-    def update_bank_options(selected_bank_peers, selected_card_peers):
-        bank_peers_options = [{'label': bank, 'value': bank, 'disabled': bank in selected_bank_peers} for bank in bank_peers]
-        card_peers_options = [{'label': bank, 'value': bank, 'disabled': bank in selected_card_peers} for bank in card_peers]
-        return bank_peers_options, card_peers_options
-
-    @app.callback(
-        Output('bank-peers-selector', 'value'),
-        Input('add-all-bank-peers', 'n_clicks'),
-        State('bank-peers-selector', 'value'),
-        State('bank-peers-selector', 'options')
-    )
-    def add_all_bank_peers(n_clicks, current_value, options):
-        if n_clicks is None:
-            raise dash.exceptions.PreventUpdate
-        all_values = [option['value'] for option in options if option['value'] not in current_value]
-        return current_value + all_values
-
-    @app.callback(
-        Output('card-peers-selector', 'value'),
-        Input('add-all-card-peers', 'n_clicks'),
-        State('card-peers-selector', 'value'),
-        State('card-peers-selector', 'options')
-    )
-    def add_all_card_peers(n_clicks, current_value, options):
+    def add_all_peers(n_clicks, current_value, options):
         if n_clicks is None:
             raise dash.exceptions.PreventUpdate
         all_values = [option['value'] for option in options if option['value'] not in current_value]
@@ -1034,16 +988,13 @@ def main():
         {"cert": "3510", "name": "Bank of America, National Association"},
         {"cert": "7213", "name": "Citibank, National Association"},
         {"cert": "628", "name": "JPMorgan Chase Bank, National Association"},
+        {"cert": "6548", "name": "U.S. Bank National Association"},
         {"cert": "6384", "name": "PNC Bank, National Association"},
         {"cert": "9846", "name": "Truist Bank"},
         {"cert": "4297", "name": "Capital One, National Association"},
         {"cert": "33124", "name": "Goldman Sachs Bank USA"},
         {"cert": "32992", "name": "Morgan Stanley Bank, National Association"},
-        {"cert": "18409", "name": "TD Bank, National Association"},
-        {"cert": "5649", "name": "Discover Bank"},
-        {"cert": "27499", "name": "Comenity Bank"},
-        {"cert": "27314", "name": "Synchrony Bank"},
-        {"cert": "6548", "name": "U.S. Bank National Association"}
+        {"cert": "18409", "name": "TD Bank, National Association"}
     ]
     start_date = '20190331'  # March 31, 2019
     end_date = '20240331'    # March 31, 2024
