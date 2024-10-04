@@ -39,7 +39,7 @@ class BankDataAnalyzer:
             'Agriculture Loans', 
             'Credit Cards', 
             'Consumer Loans',
-            'Allowance for Loan Loss', 
+            'Allowance for Credit Loss', 
             'Past Due 30-89 Days',
             'Past Due 90+ Days', 
             'Tier 1 (Core) Capital', 
@@ -49,7 +49,7 @@ class BankDataAnalyzer:
             'Total Loans and Leases Net Charge-Offs Quarterly',
             'Common Equity Tier 1 Before Adjustments',
             'Bank Equity Capital',
-            'CECL Phase-In',
+            'CECL Transition Amount',
             'Perpetual Preferred Stock'
         ]
         self.metric_definitions = {
@@ -72,7 +72,7 @@ class BankDataAnalyzer:
             'Agriculture Loans': "(YTD, $) Loans to finance agricultural production and other loans to farmers.",
             'Credit Cards': "(YTD, $) Consumer loans extended through credit card plans.",
             'Consumer Loans': "(YTD, $) Other loans to individuals for personal expenditures, including student loans.",
-            'Allowance for Loan Loss': "(YTD, $) Reserve for estimated credit losses associated with the loan and lease portfolio.",
+            'Allowance for Credit Loss': "(YTD, $) Reserve for estimated credit losses associated with the loan and lease portfolio.",
             'Past Due 30-89 Days': "(Qtly, $) Loans and leases past due 30-89 days, in dollars.",
             'Past Due 90+ Days': "(Qtly, $) Loans and leases past due 90 days or more, in dollars.",
             'Tier 1 (Core) Capital': "(Qtly, $) Tier 1 core capital, which includes common equity tier 1 capital and additional tier 1 capital.",
@@ -81,11 +81,11 @@ class BankDataAnalyzer:
             'Total Loans and Leases Net Charge-Offs Quarterly': "(Qtly, $) Total loans and leases net charge-offs for the quarter.",
             'Net Income': "(YTD, $) Net income earned by the entity.",
             'RE Construction and Land Development': "(YTD, $) Real estate construction and land development loans.",
-            'RE Construction and Land Development to Tier 1 + ALLL': "(Qtly, %) Real estate construction and land development loans as a percentage of Tier 1 (Core) Capital plus Allowance for Loan Loss.",
+            'RE Construction and Land Development to Tier 1 + ACL': "(Qtly, %) Real estate construction and land development loans as a percentage of Tier 1 (Core) Capital plus Allowance for Credit Loss.",
             'Common Equity Tier 1 Before Adjustments': "(YTD, $) Common Equity Tier 1 capital before adjustments.",
             'Bank Equity Capital': "(YTD, $) Total bank equity capital.",
             'Perpetual Preferred Stock': "(YTD, $) The amount of perpetual preferred stock issued by the bank.",
-            'CECL Phase-In': "(YTD, $) Current Expected Credit Loss (CECL) Phase-In amount, not including Deferred Tax Assets, adjusted for Perpetual Preferred Stock.",
+            'CECL Transition Amount': "(YTD, $) Current Expected Credit Loss (CECL) Transition Amount, not including Deferred Tax Assets, adjusted for Perpetual Preferred Stock.",
             'Net Interest Margin': "(YTD, %) The net interest margin of the entity.",
             'Earning Assets / Total Assets': "(Qtly, %) Ratio of earning assets to total assets.",
             'Nonperforming Assets / Total Assets': "(Qtly, %) Ratio of nonperforming assets to total assets.",
@@ -104,13 +104,13 @@ class BankDataAnalyzer:
             'Leverage (Core Capital) Ratio': "(Qtly, %) Leverage ratio (core capital ratio).",
             'Total Risk-Based Capital Ratio': "(Qtly, %) Total risk-based capital ratio.",
             'Efficiency Ratio': "(YTD, %) The efficiency ratio of the entity.",
-            'Real Estate Loans to Tier 1 + ALLL': "(Qtly, %) Real Estate Loans as a percentage of Tier 1 (Core) Capital plus Allowance for Loan Loss.",
-            'Commercial RE to Tier 1 + ALLL': "(Qtly, %) Sum of RE Construction and Land Development, Multifamily, Loans to Nonresidential Properties, and Commercial Real Estate Loans not Secured by Real Estate as a percentage of Tier 1 (Core) Capital plus Allowance for Loan Loss.",
-            'Non-Owner Occupied CRE 3-Year Growth Rate': "(%) 3-year growth rate of Non-Owner Occupied Commercial Real Estate, which includes RE Construction and Land Development, Multifamily, Non-OOC Nonresidential Properties Loans, and Commercial Real Estate Loans not Secured by Real Estate.",
-            'C&I Loans to Tier 1 + ALLL': "(Qtly, %) Commercial and Industrial Loans as a percentage of Tier 1 (Core) Capital plus Allowance for Loan Loss.",
-            'Agriculture Loans to Tier 1 + ALLL': "(Qtly, %) Agriculture Loans as a percentage of Tier 1 (Core) Capital plus Allowance for Loan Loss.",
-            'Credit Cards to Tier 1 + ALLL': "(Qtly, %) Credit Card loans as a percentage of Tier 1 (Core) Capital plus Allowance for Loan Loss.",
-            'Net Charge-Offs / Allowance for Loan Loss': "(Qtly, %) Ratio of Quarterly Net Charge-Offs to Allowance for Loan Loss.",
+            'Real Estate Loans to Tier 1 + ACL': "(Qtly, %) Real Estate Loans as a percentage of Tier 1 (Core) Capital plus Allowance for Credit Loss.",
+            'Commercial RE to Tier 1 + ACL': "(Qtly, %) Sum of RE Construction and Land Development, Multifamily, Loans to Nonresidential Properties, and Commercial Real Estate Loans not Secured by Real Estate as a percentage of Tier 1 (Core) Capital plus Allowance for Credit Loss.",
+            'Non-Owner Occupied CRE 3-Year Growth Rate': "(%) 3-year annualized growth rate of Non-Owner Occupied Commercial Real Estate, which includes RE Construction and Land Development, Multifamily, Non-OOC Nonresidential Properties Loans, and Commercial Real Estate Loans not Secured by Real Estate.",
+            'C&I Loans to Tier 1 + ACL': "(Qtly, %) Commercial and Industrial Loans as a percentage of Tier 1 (Core) Capital plus Allowance for Credit Loss.",
+            'Agriculture Loans to Tier 1 + ACL': "(Qtly, %) Agriculture Loans as a percentage of Tier 1 (Core) Capital plus Allowance for Credit Loss.",
+            'Credit Cards to Tier 1 + ACL': "(Qtly, %) Credit Card loans as a percentage of Tier 1 (Core) Capital plus Allowance for Credit Loss.",
+            'Net Charge-Offs / Allowance for Credit Loss': "(Qtly, %) Ratio of Quarterly Net Charge-Offs to Allowance for Credit Loss.",
         }
 
     def get_data(self, endpoint: str, params: Dict) -> Dict:
@@ -203,7 +203,7 @@ class BankDataAnalyzer:
                     'Agriculture Loans': self.safe_float(financial.get('LNAG')),
                     'Credit Cards': self.safe_float(financial.get('LNCRCD')),
                     'Consumer Loans': self.safe_float(financial.get('LNCONOTH')),
-                    'Allowance for Loan Loss': self.safe_float(financial.get('LNATRES')),
+                    'Allowance for Credit Loss': self.safe_float(financial.get('LNATRES')),
                     'Past Due 30-89 Days': self.safe_float(financial.get('P3ASSET')),
                     'Past Due 90+ Days': self.safe_float(financial.get('P9ASSET')),
                     'Tier 1 (Core) Capital': self.safe_float(financial.get('RBCT1J')),
@@ -239,37 +239,40 @@ class BankDataAnalyzer:
                 eq = metrics['Bank Equity Capital']
                 eqpp = metrics['Perpetual Preferred Stock']
                 tier1_capital = metrics['Tier 1 (Core) Capital']
-                allowance_for_loan_loss = metrics['Allowance for Loan Loss']
+                allowance_for_credit_loss = metrics['Allowance for Credit Loss']
 
-                # CECL Phase-In calculation
-                cecl_phase_in = ct1badj - eq + eqpp
-                metrics['CECL Phase-In'] = cecl_phase_in
-
-                # Updated capital_base calculation
-                capital_base = tier1_capital + allowance_for_loan_loss - cecl_phase_in
+                # CECL Transition Amount calculation (only apply from 1/1/2019 onwards)
+                date = pd.to_datetime(financial.get('REPDTE'), format='%Y%m%d')
+                if date >= pd.to_datetime('2019-01-01'):
+                    cecl_transition_amount = ct1badj - eq + eqpp
+                    metrics['CECL Transition Amount'] = cecl_transition_amount
+                    capital_base = tier1_capital + allowance_for_credit_loss - cecl_transition_amount
+                else:
+                    metrics['CECL Transition Amount'] = 0
+                    capital_base = tier1_capital + allowance_for_credit_loss
 
                 if capital_base > 0:
-                    metrics['Real Estate Loans to Tier 1 + ALLL'] = (metrics['Real Estate Loans'] / capital_base) * 100
-                    metrics['RE Construction and Land Development to Tier 1 + ALLL'] = (metrics['RE Construction and Land Development'] / capital_base) * 100
-                    metrics['C&I Loans to Tier 1 + ALLL'] = (metrics['Commercial and Industrial Loans'] / capital_base) * 100
-                    metrics['Agriculture Loans to Tier 1 + ALLL'] = (metrics['Agriculture Loans'] / capital_base) * 100
-                    metrics['Credit Cards to Tier 1 + ALLL'] = (metrics['Credit Cards'] / capital_base) * 100
+                    metrics['Real Estate Loans to Tier 1 + ACL'] = (metrics['Real Estate Loans'] / capital_base) * 100
+                    metrics['RE Construction and Land Development to Tier 1 + ACL'] = (metrics['RE Construction and Land Development'] / capital_base) * 100
+                    metrics['C&I Loans to Tier 1 + ACL'] = (metrics['Commercial and Industrial Loans'] / capital_base) * 100
+                    metrics['Agriculture Loans to Tier 1 + ACL'] = (metrics['Agriculture Loans'] / capital_base) * 100
+                    metrics['Credit Cards to Tier 1 + ACL'] = (metrics['Credit Cards'] / capital_base) * 100
 
-                    # Commercial RE to Tier 1 + ALLL calculation
+                    # Commercial RE to Tier 1 + ACL calculation
                     commercial_re = (
                         metrics['RE Construction and Land Development'] +
                         metrics['Multifamily'] +
                         metrics['Loans to Nonresidential Properties'] +
                         metrics['Commercial Real Estate Loans not Secured by Real Estate']
                     )
-                    metrics['Commercial RE to Tier 1 + ALLL'] = (commercial_re / capital_base) * 100
+                    metrics['Commercial RE to Tier 1 + ACL'] = (commercial_re / capital_base) * 100
                 else:
-                    metrics['Real Estate Loans to Tier 1 + ALLL'] = 0
-                    metrics['RE Construction and Land Development to Tier 1 + ALLL'] = 0
-                    metrics['C&I Loans to Tier 1 + ALLL'] = 0
-                    metrics['Agriculture Loans to Tier 1 + ALLL'] = 0
-                    metrics['Commercial RE to Tier 1 + ALLL'] = 0
-                    metrics['Credit Cards to Tier 1 + ALLL'] = 0
+                    metrics['Real Estate Loans to Tier 1 + ACL'] = 0
+                    metrics['RE Construction and Land Development to Tier 1 + ACL'] = 0
+                    metrics['C&I Loans to Tier 1 + ACL'] = 0
+                    metrics['Agriculture Loans to Tier 1 + ACL'] = 0
+                    metrics['Commercial RE to Tier 1 + ACL'] = 0
+                    metrics['Credit Cards to Tier 1 + ACL'] = 0
 
                 # Calculate Non-Owner Occupied CRE
                 non_owner_occupied_cre = (
@@ -297,11 +300,11 @@ class BankDataAnalyzer:
                 else:
                     metrics['Non-Owner Occupied CRE 3-Year Growth Rate'] = None
 
-                # Calculate Net Charge-Offs / Allowance for Loan Loss using the new metric
-                if metrics['Allowance for Loan Loss'] > 0:
-                    metrics['Net Charge-Offs / Allowance for Loan Loss'] = (metrics['Total Loans and Leases Net Charge-Offs Quarterly'] / metrics['Allowance for Loan Loss']) * 100
+                # Calculate Net Charge-Offs / Allowance for Credit Loss using the new metric
+                if metrics['Allowance for Credit Loss'] > 0:
+                    metrics['Net Charge-Offs / Allowance for Credit Loss'] = (metrics['Total Loans and Leases Net Charge-Offs Quarterly'] / metrics['Allowance for Credit Loss']) * 100
                 else:
-                    metrics['Net Charge-Offs / Allowance for Loan Loss'] = 0
+                    metrics['Net Charge-Offs / Allowance for Credit Loss'] = 0
 
                 all_metrics.append(metrics)
 
@@ -326,14 +329,14 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
     
     # Define the order of metrics
     metric_order = [
-        'Real Estate Loans to Tier 1 + ALLL',
-        'RE Construction and Land Development to Tier 1 + ALLL',
-        'Commercial RE to Tier 1 + ALLL',
+        'Real Estate Loans to Tier 1 + ACL',
+        'RE Construction and Land Development to Tier 1 + ACL',
+        'Commercial RE to Tier 1 + ACL',
         'Non-Owner Occupied CRE 3-Year Growth Rate',
-        'C&I Loans to Tier 1 + ALLL',
-        'Agriculture Loans to Tier 1 + ALLL',
-        'Credit Cards to Tier 1 + ALLL',
-        'Net Charge-Offs / Allowance for Loan Loss',
+        'C&I Loans to Tier 1 + ACL',
+        'Agriculture Loans to Tier 1 + ACL',
+        'Credit Cards to Tier 1 + ACL',
+        'Net Charge-Offs / Allowance for Credit Loss',
         'Net Charge-Offs / Total Loans & Leases',
         'Earnings Coverage of Net Loan Charge-Offs',
         'Loan and Lease Loss Provision to Net Charge-Offs',
@@ -363,30 +366,70 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
         "Bank of America, National Association": "Bank of America",
         "Citibank, National Association": "Citibank",
         "JPMorgan Chase Bank, National Association": "JPMorgan Chase",
+        "U.S. Bank National Association": "U.S. Bank",
         "PNC Bank, National Association": "PNC Bank",
         "Truist Bank": "Truist Bank",
-        "Capital One, National Association": "Capital One",
         "Goldman Sachs Bank USA": "Goldman Sachs",
         "Morgan Stanley Bank, National Association": "Morgan Stanley",
         "TD Bank, National Association": "TD Bank",
-        "U.S. Bank National Association": "U.S. Bank"
+        "Capital One, National Association": "Capital One",
+        "The Bank of New York Mellon": "BNY Mellon",
+        "State Street Bank and Trust Company": "State Street",
+        "HSBC Bank USA, National Association": "HSBC USA",
+        "Fifth Third Bank, National Association": "Fifth Third Bank",
+        "Citizens Bank, National Association": "Citizens Bank",
+        "BMO Harris Bank National Association": "BMO Harris Bank",
+        "Ally Bank": "Ally Bank",
+        "KeyBank National Association": "KeyBank",
+        "Regions Bank": "Regions Bank",
+        "Northern Trust Company": "Northern Trust",
+        "American Express National Bank": "American Express Bank",
+        "MUFG Union Bank, National Association": "MUFG Union Bank",
+        "Discover Bank": "Discover Bank",
+        "Huntington National Bank": "Huntington Bank",
+        "Synchrony Bank": "Synchrony Bank",
+        "Santander Bank, N.A.": "Santander Bank",
+        "SVB Financial Group": "SVB Financial Group",
+        "First Republic Bank": "First Republic Bank",
+        "M&T Bank Corporation": "M&T Bank"
     }
 
     # Apply the mapping to the dataframe
     df['Bank'] = df['Bank'].map(bank_name_mapping)
 
-    # Define peer institutions
-    peer_institutions = [
+    # Define peer groups
+    bank_peers = [
         "Bank of America",
         "Citibank",
         "JPMorgan Chase",
         "U.S. Bank",
         "PNC Bank",
         "Truist Bank",
-        "Capital One",
         "Goldman Sachs",
         "Morgan Stanley",
-        "TD Bank"
+        "TD Bank",
+        "BNY Mellon",
+        "State Street",
+        "HSBC USA",
+        "Fifth Third Bank",
+        "Citizens Bank",
+        "BMO Harris Bank",
+        "KeyBank",
+        "Regions Bank",
+        "Northern Trust",
+        "MUFG Union Bank",
+        "Huntington Bank",
+        "Santander Bank",
+        "SVB Financial Group",
+        "First Republic Bank",
+        "M&T Bank"
+    ]
+    card_peers = [
+        "Capital One",
+        "American Express Bank",
+        "Discover Bank",
+        "Synchrony Bank",
+        "Ally Bank"
     ]
 
     # Custom CSS for better styling
@@ -500,10 +543,10 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
                     background-color: #bfbfbf;
                 }
                 .rc-slider-track {
-                    background-color: #007bff;
+                    background-color: #cd0000;
                 }
                 .rc-slider-handle {
-                    border-color: #007bff;
+                    border-color: #cd0000;
                 }
                 .rc-slider-mark-text {
                     color: #666666;
@@ -517,7 +560,7 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
                 .stat-section-title {
                     font-weight: bold;
                     margin-bottom: 5px;
-                    color: #007bff;
+                    color: #cd0000;
                 }
                 .stat-row {
                     display: flex;
@@ -531,7 +574,7 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
                     color: #cd0000;
                 }
                 .add-all-btn {
-                    background-color: #007bff;
+                    background-color: #cd0000;
                     color: #ffffff;
                     border: none;
                     padding: 5px 10px;
@@ -542,7 +585,7 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
                     transition: background-color 0.3s;
                 }
                 .add-all-btn:hover {
-                    background-color: #0056b3;
+                    background-color: #a50000;
                 }
             </style>
         </head>
@@ -559,7 +602,7 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
 
     sidebar = html.Div(
         [
-            html.H4("Wells Fargo Metrics", className="display-6 mb-4", style={"color": "#333333"}),
+            html.H4("Wells Fargo Metrics Dashboard", className="display-6 mb-4", style={"color": "#333333"}),
             html.Hr(style={"borderColor": "#e9ecef"}),
             html.P("Select a metric to display", className="lead", style={"color": "#333333"}),
             dcc.Dropdown(
@@ -572,17 +615,34 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
             ),
             html.Div(id='metric-definition', className="metric-definition mt-3"),
             html.Hr(style={"borderColor": "#e9ecef"}),
-            html.P("Select peer institutions to compare", className="lead", style={"color": "#333333"}),
-            dcc.Dropdown(
-                id='peer-institutions-selector',
-                options=[{'label': bank, 'value': bank} for bank in peer_institutions],
-                value=peer_institutions,  # Set default value to all peer institutions
-                multi=True,
-                style={'width': '100%', 'color': '#333333'},
-                optionHeight=55
+            html.P("Select peer groups to compare", className="lead", style={"color": "#333333"}),
+            dcc.Checklist(
+                id='peer-group-selector',
+                options=[
+                    {'label': 'Bank Peers', 'value': 'bank_peers'},
+                    {'label': 'Card Peers', 'value': 'card_peers'},
+                ],
+                value=['bank_peers'],  # Set default value to bank peers
+                style={'color': '#333333'}
             ),
-            html.Button("Add All Peer Institutions", id="add-all-peers", className="add-all-btn"),
-            html.Div(id='selected-banks-info', className="mt-3", style={"color": "#333333"})
+            html.Div(id='peer-selector', className="mt-3"),
+            html.Hr(style={"borderColor": "#e9ecef"}),
+            html.P("Select trend timeline", className="lead", style={"color": "#333333"}),
+            dcc.Dropdown(
+                id='trend-timeline-selector',
+                options=[
+                    {'label': '1 Year', 'value': 1},
+                    {'label': '2 Years', 'value': 2},
+                    {'label': '5 Years', 'value': 5},
+                    {'label': '10 Years', 'value': 10},
+                    {'label': '15 Years', 'value': 15},
+                    {'label': '20 Years', 'value': 20},
+                ],
+                value=5,  # Set default value to 5 years
+                clearable=False,
+                style={'width': '100%', 'color': '#333333'},
+            ),
+            html.Div(id='selected-peers-info', className="mt-3", style={"color": "#333333"})
         ],
         className="sidebar"
     )
@@ -599,10 +659,10 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
                                      for date in unique_dates],
                             value=max(unique_dates).strftime('%Y-%m-%d'),
                             clearable=False,
-                            style={'width': '120px', 'color': '#333333'},  # Adjusted width here
+                            style={'width': '120px', 'color': '#333333'},
                         ),
                         width=4,
-                        style={'display': 'flex', 'justifyContent': 'flex-end'}  # Align dropdown to the right
+                        style={'display': 'flex', 'justifyContent': 'flex-end'}
                     ),
                 ])
             ]),
@@ -628,19 +688,39 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
     app.layout = html.Div([sidebar, content], id="app-container")
 
     @app.callback(
+        Output('peer-selector', 'children'),
+        Input('peer-group-selector', 'value')
+    )
+    def update_peer_selector(selected_groups):
+        all_peers = []
+        if 'bank_peers' in selected_groups:
+            all_peers.extend(bank_peers)
+        if 'card_peers' in selected_groups:
+            all_peers.extend(card_peers)
+        
+        return dcc.Dropdown(
+            id='individual-peer-selector',
+            options=[{'label': peer, 'value': peer} for peer in all_peers],
+            value=all_peers,  # Default to all peers selected
+            multi=True,
+            style={'width': '100%', 'color': '#333333'},
+        )
+
+    @app.callback(
         Output('bar-chart', 'figure'),
         Output('metric-overview', 'children'),
         Output('metric-definition', 'children'),
-        Output('selected-banks-info', 'children'),
+        Output('selected-peers-info', 'children'),
         Input('metric-selector', 'value'),
         Input('date-selector', 'value'),
-        Input('peer-institutions-selector', 'value')
+        Input('individual-peer-selector', 'value'),
+        Input('trend-timeline-selector', 'value')
     )
-    def update_bar_chart(selected_metric, selected_date, selected_peers):
+    def update_bar_chart(selected_metric, selected_date, selected_peers, trend_timeline):
         selected_date = pd.to_datetime(selected_date).to_pydatetime()
 
-        # Always include Wells Fargo, even if no peers are selected
-        selected_banks = ['Wells Fargo'] + (selected_peers if selected_peers else [])
+        # Always include Wells Fargo
+        selected_banks = ['Wells Fargo'] + selected_peers
 
         filtered_df = df[(df['Date'] == selected_date) & (df['Bank'].isin(selected_banks))]
 
@@ -682,19 +762,8 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
         # Add trend subplot
         trend_df = df[df['Bank'].isin(selected_banks)].pivot(index='Date', columns='Bank', values=selected_metric)
         
-        # Determine the actual number of years in the data
-        years_in_data = (trend_df.index.max() - trend_df.index.min()).days / 365.25
-        
-        # For the 3-Year Growth Rate metric, use 2 years
-        if 'Year Growth Rate' in selected_metric:
-            num_years = 2
-            trend_title = "2-Year Trend"
-        else:
-            num_years = min(5, max(1, int(years_in_data)))
-            trend_title = f"{num_years}-Year Trend"
-        
-        # Filter the trend data to only include the last num_years of data
-        start_date = trend_df.index.max() - pd.DateOffset(years=num_years)
+        # Filter the trend data to only include the last trend_timeline years of data
+        start_date = trend_df.index.max() - pd.DateOffset(years=trend_timeline)
         trend_df = trend_df[trend_df.index >= start_date]
 
         for bank in trend_df.columns:
@@ -728,14 +797,15 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
         # Format the date as requested
         formatted_date = selected_date.strftime('%m/%d/%y')
 
+        # Update the figure layout
         fig.update_layout(
             xaxis2=dict(domain=[0.65, 1]),  # Extend the domain of the second subplot
             title=f"{selected_metric} as of {formatted_date}",
             title_x=0.01,
             height=600,
             margin=dict(l=50, r=20, t=50, b=100),
-            plot_bgcolor='rgba(0,0,0,0)',
-            paper_bgcolor='rgba(0,0,0,0)',
+            plot_bgcolor='white',  # Set plot background to white
+            paper_bgcolor='white',  # Set paper background to white
             font=dict(color='#333333'),
             hoverlabel=dict(bgcolor="#ffffff", font_size=12, font_color="#333333"),
         )
@@ -749,20 +819,31 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
                          range=[y_min - y_padding, y_max + y_padding],
                          showgrid=True, gridcolor='rgba(0, 0, 0, 0.1)', gridwidth=1)
 
+        # Determine appropriate tick settings based on trend timeline
+        if trend_timeline <= 2:
+            dtick = 'M3'  # Every 3 months
+            tickformat = '%b\n%Y'
+        elif trend_timeline <= 5:
+            dtick = 'M6'  # Every 6 months
+            tickformat = '%b\n%Y'
+        elif trend_timeline <= 10:
+            dtick = 'M12'  # Every year
+            tickformat = '%Y'
+        else:
+            dtick = 'M24'  # Every 2 years
+            tickformat = '%Y'
+
         # Update trend chart
         fig.update_xaxes(
             title_text=None, 
             row=1, 
             col=2,
-            tickformat='%m/%d/%y',
-            dtick='M6',  # Show ticks every 6 months
+            tickformat=tickformat,
+            dtick=dtick,
             showgrid=True, 
             gridcolor='rgba(0, 0, 0, 0.1)', 
             gridwidth=1,
             tickangle=-45,  # Angle the tick labels
-            tickmode='array',
-            tickvals=trend_df.index[::2],  # Show every other tick to reduce clutter
-            ticktext=[d.strftime('%m/%d/%y') for d in trend_df.index[::2]]
         )
         fig.update_yaxes(title_text=None, row=1, col=2,
                          range=[trend_min - trend_padding, trend_max + trend_padding],
@@ -774,7 +855,7 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
             xref="x domain", yref="y domain",
             x=0.5, y=1.02,
             xanchor='center', yanchor='bottom',
-            text=trend_title,
+            text=f"{trend_timeline}-Year Trend",
             showarrow=False,
             font=dict(size=12, color="#333333"),
             row=1, col=2
@@ -798,6 +879,7 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
 
         # Calculate trend statistics
         trend_df = df[df['Bank'].isin(selected_banks)].pivot(index='Date', columns='Bank', values=selected_metric)
+        trend_df = trend_df[trend_df.index >= start_date]
         wf_trend = trend_df['Wells Fargo'].dropna() if 'Wells Fargo' in trend_df.columns else pd.Series()
         peer_trends = trend_df.drop('Wells Fargo', axis=1, errors='ignore').dropna()
 
@@ -864,9 +946,9 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
                 ], className="stat-row"),
             ], className="stat-section"),
 
-            # 5-Year Trend Analysis Section
+            # Long-term Trend Analysis Section
             html.Div([
-                html.Div(f"{num_years}-Year Trend Analysis ({start_datetime.strftime('%m/%d/%Y')} - {end_datetime.strftime('%m/%d/%Y')})", className="stat-section-title"),
+                html.Div(f"{trend_timeline}-Year Trend Analysis", className="stat-section-title"),
                 html.Div([
                     html.Div("Wells Fargo's Growth Rate:", className="stat-label"),
                     html.Div(f"{wf_slope:.4f} per year" if not np.isnan(wf_slope) else "N/A")
@@ -900,18 +982,18 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
 
         metric_definition = html.P(metric_definitions.get(selected_metric, ''), className="metric-definition")
 
-        selected_banks_info = html.Div([
-            html.P(f"Peer Institutions: {len(selected_peers)} of {len(peer_institutions)} selected")
+        selected_peers_info = html.Div([
+            html.P(f"Selected Peers: {len(selected_peers)} banks")
         ], style={"margin-top": "10px", "color": "#333333"})
 
-        return fig, overview, metric_definition, selected_banks_info
+        return fig, overview, metric_definition, selected_peers_info
 
     @app.callback(
         Output('bank-details', 'children'),
         Input('bar-chart', 'clickData'),
         Input('date-selector', 'value'),
         Input('metric-selector', 'value'),
-        Input('peer-institutions-selector', 'value')
+        Input('individual-peer-selector', 'value')
     )
     def display_click_data(clickData, selected_date, selected_metric, selected_peers):
         selected_date = pd.to_datetime(selected_date).to_pydatetime()
@@ -965,18 +1047,6 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
             ], striped=True, bordered=True, hover=True, size="sm", className="mt-3")
         ]
 
-    @app.callback(
-        Output('peer-institutions-selector', 'value'),
-        Input('add-all-peers', 'n_clicks'),
-        State('peer-institutions-selector', 'value'),
-        State('peer-institutions-selector', 'options')
-    )
-    def add_all_peers(n_clicks, current_value, options):
-        if n_clicks is None:
-            raise dash.exceptions.PreventUpdate
-        all_values = [option['value'] for option in options if option['value'] not in current_value]
-        return current_value + all_values
-
     return app, server
 
 def main():
@@ -991,13 +1061,32 @@ def main():
         {"cert": "6548", "name": "U.S. Bank National Association"},
         {"cert": "6384", "name": "PNC Bank, National Association"},
         {"cert": "9846", "name": "Truist Bank"},
-        {"cert": "4297", "name": "Capital One, National Association"},
         {"cert": "33124", "name": "Goldman Sachs Bank USA"},
         {"cert": "32992", "name": "Morgan Stanley Bank, National Association"},
-        {"cert": "18409", "name": "TD Bank, National Association"}
+        {"cert": "18409", "name": "TD Bank, National Association"},
+        {"cert": "4297", "name": "Capital One, National Association"},
+        {"cert": "639", "name": "The Bank of New York Mellon"},
+        {"cert": "35301", "name": "State Street Bank and Trust Company"},
+        {"cert": "413208", "name": "HSBC Bank USA, National Association"},
+        {"cert": "6672", "name": "Fifth Third Bank, National Association"},
+        {"cert": "57957", "name": "Citizens Bank, National Association"},
+        {"cert": "14583", "name": "BMO Harris Bank National Association"},
+        {"cert": "57803", "name": "Ally Bank"},
+        {"cert": "17534", "name": "KeyBank National Association"},
+        {"cert": "245", "name": "Regions Bank"},
+        {"cert": "913", "name": "Northern Trust Company"},
+        {"cert": "27471", "name": "American Express National Bank"},
+        {"cert": "22826", "name": "MUFG Union Bank, National Association"},
+        {"cert": "5649", "name": "Discover Bank"},
+        {"cert": "7745", "name": "Huntington National Bank"},
+        {"cert": "27314", "name": "Synchrony Bank"},
+        {"cert": "29950", "name": "Santander Bank, N.A."},
+        {"cert": "24940", "name": "SVB Financial Group"},
+        {"cert": "59017", "name": "First Republic Bank"},
+        {"cert": "588", "name": "M&T Bank Corporation"}
     ]
-    start_date = '20190331'  # March 31, 2019
-    end_date = '20240331'    # March 31, 2024
+    start_date = '20000331'  # March 31, 2000
+    end_date = '20240630'    # June 30, 2024
     
     analyzer.fetch_data(bank_info, start_date, end_date)
 
