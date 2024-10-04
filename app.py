@@ -374,24 +374,14 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
         "TD Bank, National Association": "TD Bank",
         "Capital One, National Association": "Capital One",
         "The Bank of New York Mellon": "BNY Mellon",
-        "State Street Bank and Trust Company": "State Street",
-        "HSBC Bank USA, National Association": "HSBC USA",
         "Fifth Third Bank, National Association": "Fifth Third Bank",
         "Citizens Bank, National Association": "Citizens Bank",
-        "BMO Harris Bank National Association": "BMO Harris Bank",
         "Ally Bank": "Ally Bank",
         "KeyBank National Association": "KeyBank",
-        "Regions Bank": "Regions Bank",
         "Northern Trust Company": "Northern Trust",
-        "American Express National Bank": "American Express Bank",
-        "MUFG Union Bank, National Association": "MUFG Union Bank",
         "Discover Bank": "Discover Bank",
-        "Huntington National Bank": "Huntington Bank",
         "Synchrony Bank": "Synchrony Bank",
-        "Santander Bank, N.A.": "Santander Bank",
-        "SVB Financial Group": "SVB Financial Group",
-        "First Republic Bank": "First Republic Bank",
-        "M&T Bank Corporation": "M&T Bank"
+        "Santander Bank, N.A.": "Santander Bank"
     }
 
     # Apply the mapping to the dataframe
@@ -409,24 +399,14 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
         "Morgan Stanley",
         "TD Bank",
         "BNY Mellon",
-        "State Street",
-        "HSBC USA",
         "Fifth Third Bank",
         "Citizens Bank",
-        "BMO Harris Bank",
         "KeyBank",
-        "Regions Bank",
         "Northern Trust",
-        "MUFG Union Bank",
-        "Huntington Bank",
-        "Santander Bank",
-        "SVB Financial Group",
-        "First Republic Bank",
-        "M&T Bank"
+        "Santander Bank"
     ]
     card_peers = [
         "Capital One",
-        "American Express Bank",
         "Discover Bank",
         "Synchrony Bank",
         "Ally Bank"
@@ -1066,24 +1046,14 @@ def main():
         {"cert": "18409", "name": "TD Bank, National Association"},
         {"cert": "4297", "name": "Capital One, National Association"},
         {"cert": "639", "name": "The Bank of New York Mellon"},
-        {"cert": "35301", "name": "State Street Bank and Trust Company"},
-        {"cert": "413208", "name": "HSBC Bank USA, National Association"},
         {"cert": "6672", "name": "Fifth Third Bank, National Association"},
         {"cert": "57957", "name": "Citizens Bank, National Association"},
-        {"cert": "14583", "name": "BMO Harris Bank National Association"},
         {"cert": "57803", "name": "Ally Bank"},
         {"cert": "17534", "name": "KeyBank National Association"},
-        {"cert": "245", "name": "Regions Bank"},
         {"cert": "913", "name": "Northern Trust Company"},
-        {"cert": "27471", "name": "American Express National Bank"},
-        {"cert": "22826", "name": "MUFG Union Bank, National Association"},
         {"cert": "5649", "name": "Discover Bank"},
-        {"cert": "7745", "name": "Huntington National Bank"},
         {"cert": "27314", "name": "Synchrony Bank"},
-        {"cert": "29950", "name": "Santander Bank, N.A."},
-        {"cert": "24940", "name": "SVB Financial Group"},
-        {"cert": "59017", "name": "First Republic Bank"},
-        {"cert": "588", "name": "M&T Bank Corporation"}
+        {"cert": "29950", "name": "Santander Bank, N.A."}
     ]
     start_date = '20000331'  # March 31, 2000
     end_date = '20240630'    # June 30, 2024
