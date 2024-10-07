@@ -378,7 +378,6 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
         "Citizens Bank, National Association": "Citizens Bank",
         "Ally Bank": "Ally Bank",
         "KeyBank National Association": "KeyBank",
-        "Northern Trust Company": "Northern Trust",
         "Discover Bank": "Discover Bank",
         "Synchrony Bank": "Synchrony Bank",
         "Santander Bank, N.A.": "Santander Bank"
@@ -402,7 +401,6 @@ def create_dashboard(df, dollar_format_metrics, metric_definitions, start_date, 
         "Fifth Third Bank",
         "Citizens Bank",
         "KeyBank",
-        "Northern Trust",
         "Santander Bank"
     ]
     card_peers = [
@@ -1050,7 +1048,6 @@ def main():
         {"cert": "57957", "name": "Citizens Bank, National Association"},
         {"cert": "57803", "name": "Ally Bank"},
         {"cert": "17534", "name": "KeyBank National Association"},
-        {"cert": "913", "name": "Northern Trust Company"},
         {"cert": "5649", "name": "Discover Bank"},
         {"cert": "27314", "name": "Synchrony Bank"},
         {"cert": "29950", "name": "Santander Bank, N.A."}
